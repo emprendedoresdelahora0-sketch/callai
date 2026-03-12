@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  subscription  Subscription?
+  settings      BusinessSettings?
+  calls         Call[]
+  prospects     Prospect[]
+  meetings      Meeting[]
+}
+
+model Subscription {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId  String?  @unique
+  stripeSubId       String?  @unique
+  status            String   @default("inactive") // active | inactive | canceled | trial
+  plan              String   @default("starter")
+  currentPeriodEnd  DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model BusinessSettings {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName    String   @default("My Business")
+  assistantName   String   @default("Aria")
+  greeting        String   @default("Hello! Thank you for calling. How can I help you today?")
+  industry        String   @default("general")
+  workingHours    String   @default("Monday-Friday 9am-6pm")
+  timezone        String   @default("America/New_York")
+  qualifyBudget   Boolean  @default(true)
+  qualifyTimeline Boolean  @default(true)
+  calendarLink    String?
+  afterHoursMsg   String   @default("We are currently closed. Our hours are Monday-Friday 9am-6pm. Please leave your details and we will call you back.")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Call {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  callSid       String    @unique       // Twilio Call SID
+  from          String                  // caller phone number
+  to            String                  // business phone number
+  status        String    @default("completed") // completed | missed | voicemail
+  duration      Int       @default(0)   // seconds
+  transcript    String?                 // full conversation
+  summary       String?                 // AI summary
+  sentiment     String?                 // positive | neutral | negative
+  intent        String?                 // schedule_meeting | get_info | complaint | other
+  prospect      Prospect?
+  createdAt     DateTime  @default(now())
+}
+
+model Prospect {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  callId        String?   @unique
+  call          Call?     @relation(fields: [callId], references: [id])
+  name          String?
+  phone         String
+  email         String?
+  company       String?
+  score         Int       @default(0)   // 0-100 qualification score
+  status        String    @default("new") // new | qualified | unqualified | converted | lost
+  budget        String?
+  timeline      String?
+  need          String?
+  notes         String?
+  meetings      Meeting[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Meeting {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prospectId  String?
+  prospect    Prospect? @relation(fields: [prospectId], references: [id])
+  title       String
+  scheduledAt DateTime
+  duration    Int       @default(30)   // minutes
+  status      String    @default("scheduled") // scheduled | completed | canceled
+  notes       String?
+  calendarUrl String?
+  createdAt   DateTime  @default(now())
+}
