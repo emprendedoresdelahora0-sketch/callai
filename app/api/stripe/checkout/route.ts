@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest } from "@/lib/auth";
-import { stripe, PRICE_ID } from "@/lib/stripe";
+import { getStripe, PRICE_ID } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   });
   if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
+  const stripe = getStripe();
   const appUrl = process.env.APP_URL || "http://localhost:3000";
 
   let customerId = user.subscription?.stripeCustomerId;
