@@ -9,6 +9,7 @@ const SECRET = new TextEncoder().encode(
 export interface JWTPayload {
   userId: string;
   email: string;
+  [key: string]: unknown;
 }
 
 export async function signToken(payload: JWTPayload): Promise<string> {
