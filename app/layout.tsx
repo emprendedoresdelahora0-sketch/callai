@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CallAI - AI Phone Assistant for Your Business",
+  title: "NOVA — Asistente de Llamadas con IA | Vantage AI Systems",
   description:
-    "Automate your calls, qualify leads and schedule meetings 24/7 with AI.",
+    "NOVA responde llamadas, califica prospectos y agenda reuniones automáticamente. No pierdas más clientes. Prueba gratis 7 días.",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>{children}</body>
     </html>
   );

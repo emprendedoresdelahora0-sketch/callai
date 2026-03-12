@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         settings: {
           create: {
             businessName: name + "'s Business",
-            assistantName: "Aria",
+            assistantName: "NOVA",
           },
         },
       },

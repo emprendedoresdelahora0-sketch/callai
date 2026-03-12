@@ -35,7 +35,7 @@ const INDUSTRY_LABELS: Record<string, string> = {
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings>({
-    businessName: "", assistantName: "Aria", greeting: "", industry: "general",
+    businessName: "", assistantName: "NOVA", greeting: "", industry: "general",
     workingHours: "Monday-Friday 9am-6pm", timezone: "America/Mexico_City",
     qualifyBudget: true, qualifyTimeline: true, calendarLink: "", afterHoursMsg: "",
   });
@@ -134,7 +134,7 @@ export default function SettingsPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">Nombre del Asistente</label>
-            <input className="input" value={settings.assistantName} placeholder="Aria"
+            <input className="input" value={settings.assistantName} placeholder="NOVA"
               onChange={(e) => setSettings({ ...settings, assistantName: e.target.value })} />
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function SettingsPage() {
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1.5">Saludo inicial</label>
           <textarea className="input resize-none h-20" value={settings.greeting}
-            placeholder="¡Hola! Gracias por llamar a [Tu Negocio]. Soy Aria, ¿en qué le puedo ayudar?"
+            placeholder="¡Hola! Gracias por llamar a [Tu Negocio]. Soy NOVA, ¿en qué le puedo ayudar?"
             onChange={(e) => setSettings({ ...settings, greeting: e.target.value })} />
         </div>
 
